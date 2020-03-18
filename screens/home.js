@@ -53,10 +53,10 @@ console.warn = message => {
   }
 };
 
- // when a user deletes one of their messages
- const deleteHandler = (docId) => {
-  db.firestore().collection("Items").doc(docId).delete().then(function() {
-    console.log("LOG: Document: "+ docId + "successfully deleted!");
+// when a user deletes one of their messages
+ const deleteHandler = async (docId) => {
+  await db.firestore().collection("Items").doc(docId).delete().then(function() {
+    console.log("LOG: Document: "+ docId + " successfully deleted!");
   })
  
 };
