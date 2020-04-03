@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, TextInput, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, TextInput, TouchableOpacity, KeyboardAvoidingView } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 
 export default function AddTodo({ submitHandler }) {
@@ -18,6 +18,7 @@ export default function AddTodo({ submitHandler }) {
   }
 
   return (
+  
     <View style={styles.container}>
       <TextInput 
         style={styles.input} 
@@ -43,6 +44,7 @@ const styles = StyleSheet.create({
   },
   input: {
     flexGrow: 1,
+    width:100,
     paddingHorizontal: 8,
     paddingVertical: 6,
     borderRadius: 15,

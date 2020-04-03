@@ -18,13 +18,12 @@ export default function TodoItem({ deleteHandler, item, userEmail }) {
 
 
     return (
-      <TouchableOpacity>
         <View style={[styles.item, {backgroundColor : userStyle.backgroundColor}]}>
           <Text style={[styles.itemText, {color : userStyle.textColor}]}> {item.text} </Text>
-          <Entypo name='circle-with-cross'  size={22}  color='#333' 
-          style={[{display : userStyle.displayDelete}]}  onPress={() => deleteHandler(item.docId)}/>
+            <Entypo name='circle-with-cross'  size={22}  color='#333' 
+            style={[ {paddingRight : 100},{display : userStyle.displayDelete}]}  onPress={() => deleteHandler(item.docId)}/>
          </View>
-         </TouchableOpacity>
+        
     );
     
 }
@@ -32,8 +31,8 @@ export default function TodoItem({ deleteHandler, item, userEmail }) {
 
 const styles = StyleSheet.create({
   item: {
-    padding: 16,
-    marginTop: 16,
+    padding: 12,
+    marginTop: 12,
     borderColor: '#bbb',
     borderWidth: 1,
     borderStyle: "dashed",
@@ -46,6 +45,8 @@ const styles = StyleSheet.create({
 
   itemText: {
     display: 'flex',
-    marginLeft: 10,
+    marginLeft: 5,
+    width: "90%",
+    marginRight: 5
   }
 });

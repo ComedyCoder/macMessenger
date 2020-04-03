@@ -96,10 +96,12 @@ console.warn = message => {
     <TouchableWithoutFeedback onPress={() => {
       Keyboard.dismiss();
     }}>
-      <KeyboardAvoidingView
-        style={styles.container}
-        behavior="padding"
-      >
+    <KeyboardAvoidingView
+    style={styles.container}
+    behavior="padding"
+    keyboardVerticalOffset={0}
+    behavior="height"
+    >
       <View style={styles.container} >
         <Header />
         <View style={styles.content}>
@@ -112,7 +114,7 @@ console.warn = message => {
               )}
             />
           </View>
-          <AddMessage submitHandler={submitHandler} />
+            <AddMessage submitHandler={submitHandler} />   
         </View>
       </View>
       </KeyboardAvoidingView>
