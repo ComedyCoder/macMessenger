@@ -4,24 +4,29 @@ import { Entypo } from '@expo/vector-icons';
 import db from '../db';
 
 export default function TodoItem({ deleteHandler, item, userEmail }) {
-  // The user that is signed in will see their messages as white
+  // The user that is signed in will see their messages as coral
   // They will also have the option to delete their messages
-  // Messages from other users will be coral
+  // Messages from other users will be white
 
   let userStyle = {backgroundColor: '', textColor: '', displayDelete: ''};
 
     if(userEmail === item.email){
-      userStyle = {backgroundColor: 'white', textColor: 'black', displayDelete: 'flex'};
+      userStyle = {backgroundColor: 'coral', textColor: 'white',  displayDelete: 'flex', 
+                   alignSelf: 'flex-end', marginLeft: 23,  marginRight: 0};
     } else{
-      userStyle = {backgroundColor: 'coral', textColor: 'white', displayDelete: 'none'};
+      userStyle = {backgroundColor: 'white', textColor: 'black', displayDelete: 'none', 
+                   alignSelf: 'flex-start', marginLeft: 0,  marginRight: 23};
     }
 
 
     return (
-        <View style={[styles.item, {backgroundColor : userStyle.backgroundColor}]}>
+        <View style={[styles.item, {backgroundColor : userStyle.backgroundColor}, 
+                     {alignSelf : userStyle.alignSelf}, {marginLeft: userStyle.marginLeft}, 
+                     {marginRight: userStyle.marginRight}]}>
+
           <Text style={[styles.itemText, {color : userStyle.textColor}]}> {item.text} </Text>
             <Entypo name='circle-with-cross'  size={22}  color='#333' 
-            style={[ {paddingRight : 100},{display : userStyle.displayDelete}]}  onPress={() => deleteHandler(item.docId)}/>
+            style={[{display : userStyle.displayDelete}]}  onPress={() => deleteHandler(item.docId)}/>
          </View>
         
     );
@@ -36,17 +41,12 @@ const styles = StyleSheet.create({
     borderColor: '#bbb',
     borderWidth: 1,
     borderStyle: "dashed",
-    borderRadius: 1,
     borderRadius: 10,
+    alignSelf: 'flex-start',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
   },
-
   itemText: {
-    display: 'flex',
-    marginLeft: 5,
-    width: "90%",
-    marginRight: 5
-  }
+   
+  },
 });
