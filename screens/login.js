@@ -1,14 +1,23 @@
 import React, { useState } from 'react';
-import {StyleSheet, View, Text, TextInput, KeyboardAvoidingView, TouchableOpacity, Alert} from 'react-native';
+import {View, Text, TextInput, KeyboardAvoidingView, 
+        TouchableOpacity, Alert, Modal} from 'react-native';
+import { loginStyles } from '../styles/global';
 import { FontAwesome } from '@expo/vector-icons';
+import { MaterialIcons } from '@expo/vector-icons';
+import RegisterForm from '../components/registerForm';
 import Home from './home';
 import db from '../db';
 
 
 export default function login(){
     const [isLoginSuccess, setIsLoginSuccess] = useState(false);
-    [emailInput, setEmailInput] = useState('');
-    [passwordInput, setPasswordInput] = useState('');
+    const [emailInput, setEmailInput] = useState('');
+    const [passwordInput, setPasswordInput] = useState('');
+    const [isModalVisible, setIsModalVisible] = useState(false);
+
+    const registerUser = () => {
+        setIsModalVisible(false);
+    }
 
     // press login button
     const loginAttempt = (email, pwd) =>{
@@ -30,16 +39,26 @@ export default function login(){
     if(!isLoginSuccess){
         return(
             <KeyboardAvoidingView
-            style={styles.container}
+            style={loginStyles.container}
             behavior="padding"
             >
-            <View style={styles.logoContainer}>
+            <Modal visible={isModalVisible} animationType={'slide'}>
+              <MaterialIcons 
+                name={'close'}
+                size={24}
+                style={loginStyles.modalToggle}
+                onPress={() => setIsModalVisible(false)}
+              />
+              <RegisterForm registerUser={registerUser} /> 
+            </Modal>
+            <View style={loginStyles.logoContainer}>
                 <FontAwesome name='send' size={80} color={'white'}/>
-                <Text style={styles.logoText}>Mac Messenger</Text>
+                <Text style={loginStyles.logoText}>Mac Messenger</Text>
             </View>
 
+            {/* Email Textbox */}
             <TextInput 
-            style={styles.input}
+            style={loginStyles.input}
             placeholder='email'
             onChangeText={setEmailInput} 
             value={emailInput}
@@ -49,8 +68,9 @@ export default function login(){
             onSubmitEditing={() => this.passwordInput.focus()}>
             </TextInput>
 
+            {/* Password Textbox */}
             <TextInput 
-            style={styles.input}
+            style={loginStyles.input}
             placeholder='Password'
             autoCapitalize='none'
             secureTextEntry
@@ -58,10 +78,16 @@ export default function login(){
             value={passwordInput}>
             </TextInput>
 
+            {/* Login button */}
             <TouchableOpacity onPress={()=>  loginAttempt(emailInput, passwordInput)}>
-                <View style={styles.button}>
-                    <Text style={styles.buttonText}>Login</Text>
+                <View style={loginStyles.loginButton}>
+                    <Text style={loginStyles.loginButtonText}>Login</Text>
                 </View>
+            </TouchableOpacity>
+
+            {/* Register button */}
+            <TouchableOpacity style={loginStyles.registerButton} onPress={()=>  setIsModalVisible(true)}>
+              <Text style={loginStyles.registerText}>Register Here</Text>
             </TouchableOpacity>
         </KeyboardAvoidingView>
         )
@@ -73,53 +99,5 @@ export default function login(){
         )
     }
 }
-
-const styles = StyleSheet.create({
-    container:{
-        flex: 1,
-        backgroundColor: 'coral',
-        padding: 20
-    },
-    logoContainer:{
-        alignItems: 'center',
-        flexGrow: 1,
-        justifyContent: 'center',
-        color: 'white'
-    },
-    logoText:{
-        color: 'white',
-        fontWeight: 'bold',
-        fontSize: 30,
-        marginTop: 10,
-        marginBottom: 20
-    },
-    input:{
-        marginBottom: 20,
-        backgroundColor: 'white',
-        borderRadius: 20,
-        paddingHorizontal: 30,
-        height: 50,
-        marginLeft: 20,
-        marginRight: 20,
-    },
-    button:{
-        height: 32,
-        marginRight: 50,
-        marginLeft: 50,
-        marginBottom:20,
-        marginTop: 10,
-        backgroundColor: '#1E90FF',
-        borderRadius: 10,
-        paddingVertical: 3,
-       
-    },
-    buttonText: {
-        textAlign: 'center',
-        color: 'white',
-        fontWeight: 'bold',
-        fontSize: 15,
-    
-    }
-})
 
 
