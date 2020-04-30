@@ -3,17 +3,16 @@
 import firebase from 'firebase';
 import 'firebase/firestore'
  let config = {
-    apiKey: "AIzaSyAJ9rybA-3-aojpEcvcSuu5dDK5r3-JZdA",
-    authDomain: "listapp-1b273.firebaseapp.com",
-    databaseURL: "https://listapp-1b273.firebaseio.com",
-    projectId: "listapp-1b273",
-    storageBucket: "listapp-1b273.appspot.com",
-    messagingSenderId: "238506513823",
-    appId: "1:238506513823:web:f63ec5417fff66d1f9d9aa",
-    measurementId: "G-PRXWDJ2C0S"
+    apiKey: "AIzaSyDuiyR0zFFMyJjdXcttZOAzHHMmTIJY0jM",
+    authDomain: "mac-messaginer-db.firebaseapp.com",
+    databaseURL: "https://mac-messaginer-db.firebaseio.com",
+    projectId: "mac-messaginer-db",
+    storageBucket: "mac-messaginer-db.appspot.com",
+    messagingSenderId: "454959700494",
+    appId: "1:454959700494:web:51c98cef1a1b48ea5f3a5f"
     };
   firebase.initializeApp(config);
  
-  const db = firebase;
+  export const dbAuth = firebase.auth();
 
- export default db;
+  export const dbFireStore = firebase.firestore();

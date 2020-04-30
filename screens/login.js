@@ -1,28 +1,55 @@
 import React, { useState } from 'react';
 import {View, Text, TextInput, KeyboardAvoidingView, 
         TouchableOpacity, Alert, Modal} from 'react-native';
+import { YellowBox } from 'react-native';
+import _ from 'lodash';
 import { loginStyles } from '../styles/global';
 import { FontAwesome } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import RegisterForm from '../components/registerForm';
-import Home from './home';
-import db from '../db';
+import {dbAuth, dbFireStore} from '../db';
+import Navigator from '../routes/homeStack';
 
 
 export default function login(){
+
+       // Ignore these Warnings, problem with Expo that has not been patched.  
+    YellowBox.ignoreWarnings(['Setting a timer']);
+    const _console = _.clone(console);
+    console.warn = message => {
+    if (message.indexOf('Setting a timer') <= -1 ) {
+        _console.warn(message);
+        }
+    };
+
     const [isLoginSuccess, setIsLoginSuccess] = useState(false);
     const [emailInput, setEmailInput] = useState('');
     const [passwordInput, setPasswordInput] = useState('');
     const [isModalVisible, setIsModalVisible] = useState(false);
 
-    const registerUser = () => {
+    const registerUser = (newUser) => {
+        dbAuth.createUserWithEmailAndPassword(newUser.email, newUser.password).then(cred => {
+            cred.user.updateProfile({
+                displayName: newUser.displayName
+              })
+            return dbFireStore.collection('users').doc(cred.user.uid).set({
+                displayName: newUser.displayName,
+                bio: newUser.bio
+            })
+        }).then(() => {
         setIsModalVisible(false);
+        console.log(dbAuth.currentUser.displayName);
+        setIsLoginSuccess(true);
+     }).catch(function(error) {
+        console.log(error);
+      });
     }
+    
 
     // press login button
     const loginAttempt = (email, pwd) =>{
-
-        db.auth().signInWithEmailAndPassword(email, pwd).then(credentials => {
+        
+        dbAuth.signInWithEmailAndPassword(email, pwd).then(credentials => {
             console.log("LOG: " + credentials.user.email + " Logged in");
             setIsLoginSuccess(true);
           }).catch(error =>  {
@@ -79,7 +106,7 @@ export default function login(){
             </TextInput>
 
             {/* Login button */}
-            <TouchableOpacity onPress={()=>  loginAttempt(emailInput, passwordInput)}>
+            <TouchableOpacity onPress={()=>  loginAttempt('mac@app.com', 'password1')}>
                 <View style={loginStyles.loginButton}>
                     <Text style={loginStyles.loginButtonText}>Login</Text>
                 </View>
@@ -95,7 +122,7 @@ export default function login(){
     else{
         return(
             // render the home.js Screen
-            < Home />
+            < Navigator />
         )
     }
 }

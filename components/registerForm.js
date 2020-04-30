@@ -6,14 +6,22 @@ import { Formik } from 'formik';
 import * as yup from 'yup';
 
 const registerSchema = yup.object({
-    email: yup.string()
+   displayName: yup.string()
+                .required()
+                .min(2)
+                .max(10),
+   email: yup.string()
            .required()
            .email(),
     password: yup.string()
               .required()
               .min(6)
+              .max(20),
+    bio: yup.string()
+         .required()
+         .max(30)
 })
-export default function RegisterForm( {registerUser}){
+export default function RegisterForm({ registerUser }){
 
   return(
       <View style={styles.container}>
@@ -23,13 +31,21 @@ export default function RegisterForm( {registerUser}){
           validationSchema={registerSchema}
           onSubmit={(values, actions) => {
             actions.resetForm();
-            console.log(values);
-            registerUser();
+            registerUser(values);
 
           }}
         >
           {(formikProps) => (
              <View>
+             <TextInput
+              style={styles.input}
+                placeholder='display name'
+                onChangeText={formikProps.handleChange('displayName')}
+                value={formikProps.values.displayName}
+                onBlur={formikProps.handleBlur('displayName')}
+              />
+              <Text style={styles.errorMessage}>{ formikProps.touched.displayName && formikProps.errors.displayName } </Text>
+
               <TextInput 
                 style={styles.input}
                 placeholder='email'
@@ -49,6 +65,15 @@ export default function RegisterForm( {registerUser}){
                 onBlur={formikProps.handleBlur('password')}
               />
               <Text style={styles.errorMessage}>{ formikProps.touched.password &&  formikProps.errors.password } </Text>
+
+             <TextInput
+              style={styles.input}
+                placeholder='bio: sale yourself'
+                onChangeText={formikProps.handleChange('bio')}
+                value={formikProps.values.bio}
+                onBlur={formikProps.handleBlur('bio')}
+              />
+              <Text style={styles.errorMessage}>{ formikProps.touched.bio && formikProps.errors.bio } </Text>
 
               <TouchableOpacity onPress={formikProps.handleSubmit}>
                 <View style={loginStyles.loginButton}>

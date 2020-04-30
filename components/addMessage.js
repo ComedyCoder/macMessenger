@@ -18,8 +18,13 @@ export default function AddTodo({ submitHandler }) {
   }
 
   return (
-  
-    <View style={styles.container}>
+    <KeyboardAvoidingView
+    style={styles.container}
+    behavior="padding"
+    keyboardVerticalOffset={0}
+    behavior="height"
+    >
+  {/* /  <View style={styles.container}> */}
       <TextInput 
         style={styles.input} 
         placeholder='Type a message'
@@ -30,21 +35,20 @@ export default function AddTodo({ submitHandler }) {
       <TouchableOpacity style={styles.addButtonContainer} onPress={pressHandler} >
         <FontAwesome name='send' size={30} color={'coral'}/>
       </TouchableOpacity>
-    </View>
+      </KeyboardAvoidingView>
+   
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    marginRight: 10,
+    marginLeft: 4,
     alignItems: 'center',
-    borderTopWidth: 3,
-    borderTopColor: '#ddd',
+  
   },
   input: {
     flexGrow: 1,
-    width:100,
     paddingHorizontal: 8,
     paddingVertical: 6,
     borderRadius: 15,
@@ -59,6 +63,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     padding: 6,
     marginLeft: 4,
+    marginRight: 2,
 
   }
   

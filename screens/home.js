@@ -11,19 +11,21 @@ import _ from 'lodash';
 import Header from '../components/header';
 import MessageItem from '../components/messageItem';
 import AddMessage from '../components/addMessage';
-import db from '../db';
+import { dbFireStore } from '../db';
 
-export default function home() {
+export default function home({ navigation }) {
   
     // using React Hooks
     const [ loading, setLoading ] = useState(true);
     const [ messages, setMessages ] = useState([]);
-    const userEmail = db.auth().currentUser.email;
+   
+    const userEmail = navigation.getParam('userEmail');
+    const chatId = navigation.getParam('chatDocId');
 
     // run on load and when changes happen in the firebase database
     useEffect(() => {
-      const unsubscribe = db;
-       db.firestore().collection("Items").orderBy("key", "desc").onSnapshot(Snapshot => {
+      const db = dbFireStore.collection("chats/"+ chatId +"/messages");
+      let unsubscribe = db.orderBy("key", "desc").onSnapshot(Snapshot => {
             const newList = [];
             Snapshot.forEach(doc => {
               newList.push({
@@ -38,10 +40,9 @@ export default function home() {
               setLoading(false);
             }
       }) 
-      return () => {
-        unsubscribe()
-      }
-    }, [db]);
+      return () => unsubscribe()
+      
+    }, []);
 
   
  // Ignore these Warnings, problem with Expo that has not been patched.  
@@ -56,7 +57,7 @@ console.warn = message => {
 
 // when a user deletes one of their messages
  const deleteHandler = async (docId) => {
-  await db.firestore().collection("Items").doc(docId).delete().then(function() {
+  await dbFireStore.collection("chats/"+ chatId +"/messages").doc(docId).delete().then(function() {
     console.log("LOG: Document: "+ docId + " successfully deleted!");
   })
  
@@ -74,10 +75,8 @@ console.warn = message => {
           key: newKey,
           email: userEmail
       }
-      await db.firestore().collection('Items').add(message).then(() => {
-        ("LOG: message sent.");
-      });
-        return;
+      await dbFireStore.collection("chats/"+ chatId +"/messages").add(message)
+      .then(() => {});
         
     } else {
       Alert.alert('OOPS', 'messages must be over 1 character long', [
@@ -97,14 +96,11 @@ console.warn = message => {
     <TouchableWithoutFeedback onPress={() => {
       Keyboard.dismiss();
     }}>
-    <KeyboardAvoidingView
+    <View
     style={styles.container}
-    behavior="padding"
-    keyboardVerticalOffset={0}
-    behavior="height"
+   
     >
       <ImageBackground source={require('../assets/game_bg.png')} size={10} style={styles.container} >
-        <Header />
         <View style={styles.content}>
           <View style={styles.list}>
             <FlatList
@@ -115,10 +111,10 @@ console.warn = message => {
               )}
             />
           </View>
-            <AddMessage submitHandler={submitHandler} />   
         </View>
       </ImageBackground>
-      </KeyboardAvoidingView>
+      <AddMessage submitHandler={submitHandler} />
+      </View>
      </TouchableWithoutFeedback>
   );
  }
@@ -136,6 +132,6 @@ const styles = StyleSheet.create({
   },
   list: {
     flex: 1,
-    marginBottom: 6
+    //marginBottom: 3
   },
 });

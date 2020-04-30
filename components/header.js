@@ -1,24 +1,31 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-export default function Header() {
+export default function Header({title, navigation}) {
   return (
     <View style={styles.header}>
-      <Text style={styles.title}>Mac Messenger</Text>
+      <View style={styles.headerTitle}>
+          <Text style={styles.title}>{ title }</Text>
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   header: {
-    height: 80,
-    paddingTop: 38,
-    backgroundColor: 'coral',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  headerTitle: {
+    flexDirection: 'row',
   },
   title: {
-    textAlign: 'center',
-    color: '#fff',
-    fontSize: 20,
     fontWeight: 'bold',
+    fontSize: 20,
+    color: 'coral',
+    letterSpacing: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   }
 });
